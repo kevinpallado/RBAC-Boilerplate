@@ -13,7 +13,7 @@ use Modules\SystemSettings\User\Models\SystemUser;
 class UsersController extends Controller
 {
     public function index(Request $request): Response {
-        return Inertia::render('settings/user')->with([
+        return Inertia::render('settings/user/user')->with([
             'users' => GeneralResourceCollection::collection(SystemUser::paginate($request->has('rows') ? $request->rows : 10))
         ]);
     }

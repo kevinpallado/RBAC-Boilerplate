@@ -4,6 +4,7 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 // controllers
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\UsersGroupController;
 use App\Http\Controllers\UsersController;
 
 /*
@@ -18,9 +19,10 @@ use App\Http\Controllers\UsersController;
 */
 
 Route::middleware('auth')->group(function () {
-    Route::get('dashboard', [DashboardController::class, 'dashboard']);
+    Route::get('dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
 
     Route::prefix('system-settings')->name('system-settings.')->group(function () {
+        Route::resource('user-group', UsersGroupController::class);
         Route::resource('users', UsersController::class);
     });
 });

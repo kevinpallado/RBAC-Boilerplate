@@ -28,7 +28,9 @@ export type PageProps<T extends Record<string, unknown> = Record<string, unknown
 };
 
 export type SidebarNavItem = {
-    title: string
+    title: string,
+    slug: string,
+    pathKey: string,
     disabled?: boolean
     external?: boolean
     icon?: keyof typeof Icons
@@ -43,6 +45,6 @@ export type SidebarNavItem = {
   )
 
 export type DashboardConfig = {
-    mainNav: MainNavItem[]
+    // mainNav: MainNavItem[]
     sidebarNav: SidebarNavItem[]
 }

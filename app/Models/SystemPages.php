@@ -11,13 +11,22 @@ class SystemPages extends Model
     protected $table = 'system_pages';
     protected $fillable = array(
         'module',
+        'module_slug',
         'page',
         'slug',
+        'page_slug',
         'active'
     );
     public $timestamps = false;
 
-    protected function slug(): Attribute
+    protected function moduleSlug(): Attribute
+    {
+        return Attribute::make(
+            set: fn($value) => Str::snake($value),
+        );
+    }
+
+    protected function pageSlug(): Attribute
     {
         return Attribute::make(
             set: fn($value) => Str::snake($value),

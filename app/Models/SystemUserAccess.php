@@ -14,4 +14,8 @@ class SystemUserAccess extends Model
         'action'
     );
     public $timestamps = false;
+
+    public function page() {
+        return $this->belongsTo(systemPages::class, 'page_id');
+    }
 }

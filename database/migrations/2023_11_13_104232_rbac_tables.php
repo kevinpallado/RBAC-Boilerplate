@@ -23,8 +23,9 @@ return new class extends Migration
         Schema::create('system_pages', function(Blueprint $table) {
             $table->id();
             $table->string('module');
+            $table->string('module_slug');
             $table->string('page');
-            $table->string('slug');
+            $table->string('page_slug');
             $table->boolean('active')->default(true);
         });
 

@@ -19,7 +19,7 @@ class RBACSeeder extends Seeder
      */
     public function run(): void
     {
-        $actions = ['view','store','update','delete','print'];
+        $actions = ['read','store','update','delete','print'];
         $pages = [
             [
                 'module' => 'Settings',
@@ -30,7 +30,7 @@ class RBACSeeder extends Seeder
                 'page' => 'Users',
             ]
         ];
-        $groups = ['Administrator','Developer','Customer'];
+        $groups = ['Administrator','Students','Faculty','Developer','Customer'];
         $users = [[
             'name' => 'Test Developer',
             'email' => 'testdeveloper@mailtrap.io',
@@ -64,8 +64,9 @@ class RBACSeeder extends Seeder
                 ['module' => $page['module'], 'page' => $page['page']],
                 [
                     'module' => $page['module'],
+                    'module_slug' => $page['module'],
                     'page' => $page['page'],
-                    'slug' => $page['module'].$page['page']
+                    'page_slug' => $page['page']
                 ]
             );
 

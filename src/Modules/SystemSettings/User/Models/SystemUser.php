@@ -8,10 +8,13 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+// custom traits
+use Modules\SystemSettings\User\Traits\UserAccessTrait;
+use Modules\SystemSettings\UserGroup\Traits\UserGroupAccessTrait;
 
 class SystemUser extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable, UserAccessTrait, UserGroupAccessTrait;
 
     protected $table = 'system_users';
     /**
@@ -51,4 +54,8 @@ class SystemUser extends Authenticatable
         'password' => 'hashed',
         'active' => 'boolean'
     ];
+
+    public function mergeViewAccess() {
+        return array_merge($this->userAccess(true)->toArray(), $this->groupAccess(true)->toArray());
+    }
 }
