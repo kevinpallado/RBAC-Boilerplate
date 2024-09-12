@@ -22,6 +22,26 @@ class RBACSeeder extends Seeder
         $actions = ['read','store','update','delete','print'];
         $pages = [
             [
+                'module' => 'Students',
+                'page' => 'Enrollment'
+            ],
+            [
+                'module' => 'Students',
+                'page' => 'Assessment and Billing'
+            ],
+            [
+                'module' => 'Students',
+                'page' => 'Evaluation'
+            ],
+            [
+                'module' => 'Students',
+                'page' => 'Grades'
+            ],
+            [
+                'module' => 'Students',
+                'page' => 'Subjects Enrolled'
+            ],
+            [
                 'module' => 'Settings',
                 'page' => 'User Group',
             ],

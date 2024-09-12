@@ -16,6 +16,6 @@ class SystemUserAccess extends Model
     public $timestamps = false;
 
     public function page() {
-        return $this->belongsTo(systemPages::class, 'page_id');
+        return $this->belongsTo(SystemPages::class, 'page_id');
     }
 }

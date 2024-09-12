@@ -1,21 +1,31 @@
-import { Head, usePage } from "@inertiajs/react";
+import { Head, usePage } from '@inertiajs/react';
 // layouts
-import DashboardLayout from "@/layouts/main";
+import DashboardLayout from '@/layouts/main';
 // global components
-import { DataTable } from "@/components/datatable/datatable"
+import { DataTable } from '@/components/datatable/datatable';
+import { Button } from '@/components/ui/button';
 // local components
-import { User, columns } from "./columns";
+import { columns } from './columns';
 
 export default function UserPage() {
-    // constants
-    const { users } = usePage<any>().props;
+  // constants
+  const { users } = usePage<any>().props;
 
-    return (
-        <>
-            <Head title="Users" />
-            <DashboardLayout pageTitle={"User Accounts"} pageDescription={"Accounts within the system."}>
-                <DataTable columns={columns} links={users.links} meta={users.meta} data={users.data} />
-            </DashboardLayout>
-        </>
-    );
+  return (
+    <>
+      <Head title="Users" />
+      <DashboardLayout
+        pageTitle={'User Accounts'}
+        pageDescription={'Registered Accounts in the system.'}
+        pageAction={<Button>Create New User</Button>}
+      >
+        <DataTable
+          columns={columns}
+          links={users.links}
+          meta={users.meta}
+          data={users.data}
+        />
+      </DashboardLayout>
+    </>
+  );
 }

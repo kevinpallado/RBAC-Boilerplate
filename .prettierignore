@@ -1,0 +1,11 @@
+node_modules/
+vendor/
+public/
+storage/
+# ignore laravel files
+app/
+bootstrap/
+config/
+database/
+src/
+tests/
