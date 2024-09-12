@@ -29,7 +29,9 @@ class SystemUser extends Authenticatable
         'benefactor',
         'beneficiary',
         'last_logged_in',
-        'active'
+        'active',
+        'user_name',
+        'user_uuid'
     ];
 
     /**

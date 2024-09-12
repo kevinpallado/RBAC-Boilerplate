@@ -2,9 +2,18 @@ import React from 'react';
 // global components
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
+import { DatePicker } from '@/components/form/date-picker';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { DatePicker } from '@/components/form/date-picker';
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 // icons
 import { ReloadIcon } from '@radix-ui/react-icons';
 
@@ -12,7 +21,6 @@ interface CustomInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label?: string;
   error?: string | null;
 }
-
 interface CustomCheckBoxProps extends React.RefAttributes<HTMLButtonElement> {
   id?: string;
   label?: string;
@@ -20,7 +28,18 @@ interface CustomCheckBoxProps extends React.RefAttributes<HTMLButtonElement> {
   checked: boolean | 'indeterminate';
   onCheckedChange?: (checked: boolean | 'indeterminate') => void;
 }
-
+type SelectOptions = {
+  id: number;
+  label?: string;
+  name?: string;
+};
+interface CustomSelectProps {
+  selectOptions: SelectOptions[];
+  onChange: any;
+  label?: string;
+  error?: string | null;
+  placeholder: string;
+}
 interface ButtonSubmit {
   loading: boolean;
   label: string;
@@ -51,7 +70,7 @@ export const FormInput: React.FC<CustomInputProps> = (props) => {
   };
 
   return (
-    <div className="grid w-full max-w-sm items-center gap-1.5">
+    <div className="grid w-full items-center gap-1.5">
       <Label htmlFor={props.id}>{props.label}</Label>
       {/*Renders Input*/}
       {renderInput()}
@@ -90,6 +109,31 @@ export const FormCheckBox: React.FC<CustomCheckBoxProps> = (props) => {
       </Label>
       {/*Renders Error Message*/}
       {renderError(props.error)}
+    </div>
+  );
+};
+
+export const FormSelect: React.FC<CustomSelectProps> = (props) => {
+  return (
+    <div className="grid w-full items-center gap-1.5">
+      <Label
+        className="ml-3 block text-sm leading-6 text-gray-900"
+        htmlFor={props.label}
+      >
+        {props.label}
+      </Label>
+      <Select onValueChange={props.onChange}>
+        <SelectTrigger className="w-full">
+          <SelectValue placeholder={props.placeholder} />
+        </SelectTrigger>
+        <SelectContent>
+          {props.selectOptions.map((option: SelectOptions, index: number) => (
+            <SelectItem key={index} value={option.id.toString()}>
+              {option.name}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
     </div>
   );
 };

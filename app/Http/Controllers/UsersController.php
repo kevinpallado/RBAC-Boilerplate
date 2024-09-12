@@ -11,6 +11,7 @@ use App\Http\Resources\GeneralResourceCollection;
 use Modules\SystemSettings\User\Traits\UserAccessTrait;
 // models
 use Modules\SystemSettings\User\Models\SystemUser;
+use Modules\SystemSettings\UserGroup\Models\SystemUserGroups;
 
 class UsersController extends Controller
 {
@@ -28,6 +29,15 @@ class UsersController extends Controller
     }
 
     public function create(Request $request): Response {
+        $this->getUserAuthorizedAction();
+        abort_unless($this->isUserHasAuthorizedAction('store'), 443);
+
+        return Inertia::render('settings/user/forms/user-form')->with([
+            'userGroups' => SystemUserGroups::select('id','name')->get()
+        ]);
+    }
+
+    public function store() {
 
     }
 }

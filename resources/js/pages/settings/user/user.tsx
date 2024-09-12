@@ -1,4 +1,4 @@
-import { Head, usePage } from '@inertiajs/react';
+import { router, usePage } from '@inertiajs/react';
 // layouts
 import DashboardLayout from '@/layouts/main';
 // global components
@@ -12,20 +12,23 @@ export default function UserPage() {
   const { users } = usePage<any>().props;
 
   return (
-    <>
-      <Head title="Users" />
-      <DashboardLayout
-        pageTitle={'User Accounts'}
-        pageDescription={'Registered Accounts in the system.'}
-        pageAction={<Button>Create New User</Button>}
-      >
-        <DataTable
-          columns={columns}
-          links={users.links}
-          meta={users.meta}
-          data={users.data}
-        />
-      </DashboardLayout>
-    </>
+    <DashboardLayout
+      pageTitle={'User Accounts'}
+      pageDescription={'Registered Accounts in the system.'}
+      pageAction={
+        <Button
+          onClick={(e) => router.get(route('system-settings.users.create'))}
+        >
+          Create New User
+        </Button>
+      }
+    >
+      <DataTable
+        columns={columns}
+        links={users.links}
+        meta={users.meta}
+        data={users.data}
+      />
+    </DashboardLayout>
   );
 }

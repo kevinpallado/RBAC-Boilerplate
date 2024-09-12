@@ -12,6 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('system_users', function(Blueprint $table) {
+            $table->string('user_name');
+            $table->string('user_uuid');
             $table->integer('group_id');
             $table->string('last_logged_in')->nullable();
             $table->boolean('active')->default(true);
