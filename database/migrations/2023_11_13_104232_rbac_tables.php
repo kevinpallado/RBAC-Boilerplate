@@ -11,13 +11,24 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('system_users', function(Blueprint $table) {
+        Schema::create('system_users', function(Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->string('first_name');
+            $table->string('last_name');
+            $table->string('email')->unique();
+            $table->timestamp('email_verified_at')->nullable();
+            $table->string('password');
+            $table->string('user_name');
+            $table->string('user_uuid');
             $table->integer('group_id');
             $table->string('last_logged_in')->nullable();
             $table->boolean('active')->default(true);
             $table->boolean('administrator')->default(false);
             $table->boolean('benefactor')->default(false);
             $table->boolean('beneficiary')->default(false);
+            $table->rememberToken();
+            $table->timestamps();
         });
 
         Schema::create('system_pages', function(Blueprint $table) {
@@ -57,9 +68,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('system_users', function(Blueprint $table) {
-            $table->dropColumn(['group_id','last_logged_in','active','administrator','benefactor','beneficiary']);
-        });
+        Schema::dropIfExists('system_users');
 
         Schema::dropIfExists('system_pages');
 

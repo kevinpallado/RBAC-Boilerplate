@@ -1,12 +1,12 @@
 <?php
 
-namespace Modules\SystemSettings\User\Traits;
+namespace ManagementSettings\Traits;
 // models
-use Modules\SystemSettings\User\Models\SystemUser;
+use ManagementSettings\Models\SystemUser;
 // plugin
 use Carbon\Carbon;
 
-trait UserLogsTrait {
+trait SystemUserLogsTrait {
 
     public function loggedInStamp() {
         SystemUser::where('id',auth()->user()->id)->update([

@@ -12,11 +12,11 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Inertia\Response;
 // traits
-use Modules\SystemSettings\User\Traits\UserLogsTrait;
+use ManagementSettings\Traits\SystemUserLogsTrait;
 
 class AuthenticatedSessionController extends Controller
 {
-    use UserLogsTrait;
+    use SystemUserLogsTrait;
     /**
      * Display the login view.
      */

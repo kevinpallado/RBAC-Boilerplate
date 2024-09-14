@@ -6,11 +6,11 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Database\Seeder;
 // models
+use App\Models\SystemUserAccess;
 use App\Models\SystemActions;
 use App\Models\SystemPages;
-use Modules\SystemSettings\User\Models\SystemUser;
-use App\Models\SystemUserAccess;
-use Modules\SystemSettings\UserGroup\Models\SystemUserGroups;
+use ManagementSettings\Models\SystemUser;
+use ManagementSettings\Models\SystemUserGroups;
 
 class RBACSeeder extends Seeder
 {
@@ -22,40 +22,24 @@ class RBACSeeder extends Seeder
         $actions = ['read','store','update','delete','print'];
         $pages = [
             [
-                'module' => 'Students',
-                'page' => 'Enrollment'
-            ],
-            [
-                'module' => 'Students',
-                'page' => 'Assessment and Billing'
-            ],
-            [
-                'module' => 'Students',
-                'page' => 'Evaluation'
-            ],
-            [
-                'module' => 'Students',
-                'page' => 'Grades'
-            ],
-            [
-                'module' => 'Students',
-                'page' => 'Subjects Enrolled'
-            ],
-            [
-                'module' => 'Settings',
+                'module' => 'Management Settings',
                 'page' => 'User Group',
             ],
             [
-                'module' => 'Settings',
+                'module' => 'Management Settings',
                 'page' => 'Users',
             ]
         ];
         $groups = ['Administrator','Students','Faculty','Developer','Customer'];
         $users = [[
+            'first_name' => 'Test',
+            'last_name' => 'Developer',
             'name' => 'Test Developer',
             'email' => 'testdeveloper@mailtrap.io',
             'password' => Hash::make('123456'),
-            'administrator' => true
+            'administrator' => true,
+            'user_name' => 'tdeveloper',
+            'user_uuid' => '000001'
             // insert group id base on search of admin group
         ]];
 
@@ -103,7 +87,11 @@ class RBACSeeder extends Seeder
                 ['name' => $user['name'], 'email' => $user['email']],
                 [
                     'name' => $user['name'], 
+                    'first_name' => $user['first_name'],
+                    'last_name' => $user['last_name'],
                     'email' => $user['email'],
+                    'user_name' => $user['user_name'],
+                    'user_uuid' => $user['user_uuid'],
                     'password' => $user['password'],
                     'administrator' => $user['administrator'],
                     'group_id' => SystemUserGroups::where("name", 'Administrator')->value('id')

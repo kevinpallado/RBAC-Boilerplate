@@ -8,7 +8,7 @@ use Inertia\Inertia;
 // resource
 use App\Http\Resources\GeneralResourceCollection;
 // models
-use Modules\SystemSettings\UserGroup\Models\SystemUserGroups;
+use ManagementSettings\Models\SystemUserGroups;
 
 class UsersGroupController extends Controller
 {

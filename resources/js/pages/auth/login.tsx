@@ -1,10 +1,4 @@
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Button } from '@/components/ui/button';
-import { Checkbox } from '@/components/ui/checkbox';
-import { ReloadIcon } from '@radix-ui/react-icons';
-
-import { Head, Link, router, useForm } from '@inertiajs/react';
+import { Head, useForm } from '@inertiajs/react';
 import {
   FormInput,
   FormCheckBox,

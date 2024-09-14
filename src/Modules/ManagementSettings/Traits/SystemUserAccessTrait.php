@@ -1,13 +1,13 @@
 <?php
 
-namespace Modules\SystemSettings\User\Traits;
+namespace ManagementSettings\Traits;
 // models
 use App\Models\SystemPages;
 use App\Models\SystemUserAccess;
 // plugin
 use Carbon\Carbon;
 
-trait UserAccessTrait {
+trait SystemUserAccessTrait {
 
     public array $authorizedAction = [];
     /**
