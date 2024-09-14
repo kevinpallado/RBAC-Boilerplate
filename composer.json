@@ -31,8 +31,7 @@
       "App\\": "app/",
       "Database\\Factories\\": "database/factories/",
       "Database\\Seeders\\": "database/seeders/",
-      "Modules\\": "src/Modules/",
-      "SystemSettings\\": "src/Modules/SystemSettings"
+      "ManagementSettings\\": "src/Modules/ManagementSettings"
     }
   },
   "autoload-dev": {

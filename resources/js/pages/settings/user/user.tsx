@@ -1,15 +1,107 @@
+import { useState } from 'react';
 import { router, usePage } from '@inertiajs/react';
+import { ColumnDef } from '@tanstack/react-table';
 // layouts
 import DashboardLayout from '@/layouts/main';
 // global components
-import { DataTable } from '@/components/datatable/datatable';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { ConfirmationDialog } from '@/components/form/confirmation-dialog';
+import { ColumnMenu } from '@/components/datatable/column-menu';
+import {
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+} from '@/components/ui/dropdown-menu';
+import { DataTable } from '@/components/datatable/datatable';
+import { toast } from 'sonner';
+// hooks
+import { useBoolean } from '@/hooks/use-boolean';
 // local components
-import { columns } from './columns';
+import Toolbar from './toolbar';
+
+type UserGroup = {
+  id: number;
+  name: string;
+};
+
+type User = {
+  id: number;
+  name: string;
+  email: string;
+  created_at: string;
+  user_group: UserGroup;
+};
 
 export default function UserPage() {
   // constants
   const { users } = usePage<any>().props;
+  const confirmDialog = useBoolean(false);
+  const [columnId, setColumnId] = useState<number | null>(null);
+
+  const submitAction = (e: any) => {
+    router.delete(route('system-settings.users.destroy', columnId), {
+      preserveScroll: true,
+      preserveState: true,
+      onSuccess: (success: any) => {
+        toast.success(success.props.notification.message);
+      },
+      onError: (errors: any) => {
+        toast.error('Something went wrong. Check form');
+      },
+    });
+  };
+
+  const columns: ColumnDef<User>[] = [
+    {
+      accessorKey: 'email',
+      header: 'Email',
+    },
+    {
+      accessorKey: 'name',
+      header: 'Name',
+    },
+    {
+      accessorKey: 'user_group',
+      header: () => <div className="text-center">User Role</div>,
+      cell: ({ row }) => (
+        <div className="text-center">
+          <Badge>{row.original.user_group.name}</Badge>
+        </div>
+      ),
+    },
+    {
+      accessorKey: 'last_logged_in',
+      header: 'Last Logged In',
+    },
+    {
+      id: 'actions',
+      header: 'Actions',
+      cell: ({ row }) => {
+        const user = row.original;
+        return (
+          <ColumnMenu>
+            <DropdownMenuItem>Custom User Access</DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem
+              onClick={(e: any) =>
+                router.visit(route('system-settings.users.edit', user.id))
+              }
+            >
+              Edit Account Details
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={(e: any) => {
+                confirmDialog.onTrue();
+                setColumnId(user.id);
+              }}
+            >
+              Remove User
+            </DropdownMenuItem>
+          </ColumnMenu>
+        );
+      },
+    },
+  ];
 
   return (
     <DashboardLayout
@@ -23,11 +115,18 @@ export default function UserPage() {
         </Button>
       }
     >
+      <Toolbar />
       <DataTable
         columns={columns}
         links={users.links}
         meta={users.meta}
         data={users.data}
+      />
+      <ConfirmationDialog
+        description="Are you sure you want to remove this user?"
+        open={confirmDialog.value}
+        openChange={confirmDialog.onToggle}
+        formFn={submitAction}
       />
     </DashboardLayout>
   );

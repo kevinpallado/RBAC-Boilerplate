@@ -1,18 +1,18 @@
 <?php
 
-namespace Modules\SystemSettings\User\Models;
+namespace ManagementSettings\Models;
 
+use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Casts\Attribute;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Support\Facades\Hash;
 // custom traits
-use Modules\SystemSettings\User\Traits\UserAccessTrait;
+use ManagementSettings\Traits\SystemUserAccessTrait;
 
 class SystemUser extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable, UserAccessTrait;
+    use SystemUserAccessTrait;
 
     protected $table = 'system_users';
     /**
@@ -22,18 +22,12 @@ class SystemUser extends Authenticatable
      */
     protected $fillable = [
         'name',
+        'first_name',
+        'last_name',
         'email',
-        'password',
         'group_id',
-        'adminstrator',
-        'benefactor',
-        'beneficiary',
-        'last_logged_in',
-        'active',
-        'user_name',
         'user_uuid'
     ];
-
     /**
      * The attributes that should be hidden for serialization.
      *
@@ -43,7 +37,6 @@ class SystemUser extends Authenticatable
         'password',
         'remember_token',
     ];
-
     /**
      * The attributes that should be cast.
      *
@@ -54,15 +47,35 @@ class SystemUser extends Authenticatable
         'password' => 'hashed',
         'active' => 'boolean'
     ];
-
     protected function lastLoggedIn(): Attribute
     {
         return Attribute::make(
             get: fn ($value) => $value ? date("F j, Y g:i a", strtotime($value)) : 'Not yet Logged In',
         );
     }
-
-    public function mergeViewAccess() {
+    protected function userName(): Attribute
+    {
+        return Attribute::make(
+            set: fn ($value) => strtolower(mb_substr(explode(" ", $value)[0], 0, 1).$value[1].Str::random(5)),
+        );
+    }
+    /**
+     * User defined table relationship 
+     */
+    public function userGroup(): BelongsTo
+    {
+        return $this->belongsTo(SystemUserGroups::class, 'group_id', 'id');
+    }
+    /**
+     * Static functions as user helpers
+     */
+    public static function generatePassword($password) {
+        return Hash::make($password.Str::random(5));
+    }
+    /** End static function */
+    public function userAuthorizedModule() {
         return array_merge($this->getUserPageAccess(true)->toArray(), $this->getUserPageAccess(true, false)->toArray());
     }
+    
+    
 }

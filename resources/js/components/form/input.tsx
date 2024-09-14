@@ -8,9 +8,7 @@ import { Label } from '@/components/ui/label';
 import {
   Select,
   SelectContent,
-  SelectGroup,
   SelectItem,
-  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
@@ -39,6 +37,8 @@ interface CustomSelectProps {
   label?: string;
   error?: string | null;
   placeholder: string;
+  required?: boolean;
+  value?: any;
 }
 interface ButtonSubmit {
   loading: boolean;
@@ -71,7 +71,10 @@ export const FormInput: React.FC<CustomInputProps> = (props) => {
 
   return (
     <div className="grid w-full items-center gap-1.5">
-      <Label htmlFor={props.id}>{props.label}</Label>
+      <Label htmlFor={props.id}>
+        {props.label}
+        {props.required && <span className="text-red-400">*</span>}
+      </Label>
       {/*Renders Input*/}
       {renderInput()}
       {/*Renders Error Message*/}
@@ -121,8 +124,9 @@ export const FormSelect: React.FC<CustomSelectProps> = (props) => {
         htmlFor={props.label}
       >
         {props.label}
+        {props.required && <span className="text-red-400">*</span>}
       </Label>
-      <Select onValueChange={props.onChange}>
+      <Select onValueChange={props.onChange} value={props.value.toString()}>
         <SelectTrigger className="w-full">
           <SelectValue placeholder={props.placeholder} />
         </SelectTrigger>
@@ -134,6 +138,8 @@ export const FormSelect: React.FC<CustomSelectProps> = (props) => {
           ))}
         </SelectContent>
       </Select>
+      {/*Renders Error Message*/}
+      {renderError(props.error)}
     </div>
   );
 };

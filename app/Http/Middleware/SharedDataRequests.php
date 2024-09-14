@@ -20,9 +20,12 @@ class SharedDataRequests extends Middleware
     {
         return [
             ...parent::share($request),
+            'notification' => [
+                'message' => fn () => $request->session()->get('message')
+            ],
             'auth' => [
                 'user' => $request->user(),
-                'access' => auth()->check() ? auth()->user()->mergeViewAccess() : []
+                'access' => auth()->check() ? auth()->user()->userAuthorizedModule() : []
             ],
             'ziggy' => fn () => [
                 ...(new Ziggy)->toArray(),
