@@ -1,8 +1,14 @@
-import { Head, usePage } from '@inertiajs/react';
+import { Head, router, usePage } from '@inertiajs/react';
 // layouts
 import DashboardLayout from '@/layouts/main';
 // global components
+import { Badge } from '@/components/ui/badge';
+import { ColumnMenu } from '@/components/datatable/column-menu';
 import { DataTable } from '@/components/datatable/datatable';
+import {
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+} from '@/components/ui/dropdown-menu';
 // plugin
 import { ColumnDef } from '@tanstack/react-table';
 
@@ -10,7 +16,8 @@ type UserGroup = {
   id: string;
   name: string;
   email: string;
-  created_at: string;
+  removable: boolean;
+  updated_at: string;
 };
 
 export default function UserGroupPage() {
@@ -19,20 +26,42 @@ export default function UserGroupPage() {
 
   const columns: ColumnDef<UserGroup>[] = [
     {
-      accessorKey: 'id',
-      header: 'ID',
-    },
-    {
       accessorKey: 'name',
       header: 'Name',
     },
     {
+      accessorKey: 'removable',
+      header: () => <div className="text-center">Removable</div>,
+      cell: ({ row }) => (
+        <div className="text-center">
+          <Badge>{row.original.removable ? 'Removable' : 'Default'}</Badge>
+        </div>
+      ),
+    },
+    {
       accessorKey: 'updated_at',
       header: 'Date Last Updated',
+    },
+    {
+      id: 'actions',
+      header: 'Actions',
       cell: ({ row }) => {
-        const data = new Date(row.getValue('updated_at'));
-        const formatted = data.toLocaleDateString();
-        return <div className="font-medium">{formatted}</div>;
+        const group = row.original;
+        return (
+          <ColumnMenu>
+            <DropdownMenuItem
+              onClick={(e) =>
+                router.visit(route('system-settings.user-group.edit', group.id))
+              }
+            >
+              Group Access
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem disabled={!row.original.removable}>
+              Edit User Group
+            </DropdownMenuItem>
+          </ColumnMenu>
+        );
       },
     },
   ];

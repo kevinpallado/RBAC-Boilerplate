@@ -32,7 +32,13 @@ class UsersController extends Controller
         abort_unless($this->isUserHasAuthorizedAction('read'), 443);
 
         return Inertia::render('settings/user/user')->with([
-            'users' => GeneralResourceCollection::collection(SystemUser::with('userGroup:id,name')->paginate($request->has('rows') ? $request->rows : 10))
+            'users' => GeneralResourceCollection::collection(SystemUser::with('userGroup:id,name')
+                ->when($request->search, fn($query, $search) => $query->where('name', 'like', '%'.$search.'%')
+                    ->orWhere('user_uuid', 'like', '%'.$search.'%')
+                    ->orWhere('email', 'like', '%'.$search.'%')
+                )
+                ->paginate($request->has('rows') ? $request->rows : 10)
+            )
         ]);
     }
 

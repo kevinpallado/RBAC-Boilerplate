@@ -30,7 +30,7 @@ class RBACSeeder extends Seeder
                 'page' => 'Users',
             ]
         ];
-        $groups = ['Administrator','Students','Faculty','Developer','Customer'];
+        $groups = ['Administrator','Faculty','Developer','Office Staff','Accounting'];
         $users = [[
             'first_name' => 'Test',
             'last_name' => 'Developer',

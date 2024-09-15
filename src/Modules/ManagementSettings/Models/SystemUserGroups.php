@@ -14,11 +14,20 @@ class SystemUserGroups extends Model
         'slug',
         'removable'
     );
+    protected $casts = [
+        'removable' => 'boolean',
+    ];
 
     protected function slug(): Attribute
     {
         return Attribute::make(
             set: fn($value) => Str::snake($value),
+        );
+    }
+    protected function updatedAt(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => $value ? date("F j, Y g:i a", strtotime($value)) : 'N/A',
         );
     }
 }

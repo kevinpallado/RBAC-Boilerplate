@@ -1,21 +1,15 @@
 import React from 'react';
 
-interface TableUpdateProps {
-  callback: () => void;
-  dependencies: [];
-}
-const useTableUpdate = (props: TableUpdateProps) => {
+export default function useTableUpdate(callback: any, dependencies: any) {
   const isFirst = React.useRef(true);
   React.useEffect(() => {
     if (!isFirst.current) {
-      let debouncer = setTimeout(() => props.callback(), 500);
+      let debouncer = setTimeout(() => callback(), 500);
       return () => clearTimeout(debouncer);
     }
-  }, props.dependencies);
+  }, dependencies);
 
   React.useEffect(() => {
     isFirst.current = false;
   }, []);
-};
-
-export default useTableUpdate;
+}

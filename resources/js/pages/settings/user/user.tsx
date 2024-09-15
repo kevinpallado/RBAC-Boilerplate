@@ -16,6 +16,7 @@ import { DataTable } from '@/components/datatable/datatable';
 import { toast } from 'sonner';
 // hooks
 import { useBoolean } from '@/hooks/use-boolean';
+import useTableUpdate from '@/hooks/use-update';
 // local components
 import Toolbar from './toolbar';
 
@@ -39,7 +40,11 @@ export default function UserPage() {
   const [columnId, setColumnId] = useState<number | null>(null);
   const [filterStatus, setFilterStatus] = useState<string | null>(null);
   const [filterSearch, setFilterSearch] = useState<string | null>(null);
-
+  // datatable information
+  const [currentPage, setCurrentPage] = useState(users.meta.current_page - 1);
+  const links = users.meta.links.filter(
+    (_: any, index: any) => ![0, users.links.length - 1].includes(index)
+  );
   // function to delete/archive user
   const submitAction = (e: any) => {
     router.delete(route('system-settings.users.destroy', columnId), {
@@ -57,6 +62,22 @@ export default function UserPage() {
   const handleFilterSearch = useCallback((e: any) => {
     setFilterSearch(e.target.value);
   }, []);
+
+  useTableUpdate(() => {
+    let querySearch = filterSearch ? { search: filterSearch } : {};
+    router.get(
+      links[currentPage].url,
+      {
+        ...querySearch,
+      },
+      {
+        preserveScroll: true,
+        preserveState: true,
+        onSuccess: (success: any) => console.log('Success Query'),
+        onError: (errors: any) => console.log(errors),
+      }
+    );
+  }, [filterSearch, filterStatus]);
 
   const columns: ColumnDef<User>[] = [
     {
