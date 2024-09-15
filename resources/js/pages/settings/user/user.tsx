@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { router, usePage } from '@inertiajs/react';
 import { ColumnDef } from '@tanstack/react-table';
 // layouts
@@ -37,7 +37,10 @@ export default function UserPage() {
   const { users } = usePage<any>().props;
   const confirmDialog = useBoolean(false);
   const [columnId, setColumnId] = useState<number | null>(null);
+  const [filterStatus, setFilterStatus] = useState<string | null>(null);
+  const [filterSearch, setFilterSearch] = useState<string | null>(null);
 
+  // function to delete/archive user
   const submitAction = (e: any) => {
     router.delete(route('system-settings.users.destroy', columnId), {
       preserveScroll: true,
@@ -50,6 +53,10 @@ export default function UserPage() {
       },
     });
   };
+
+  const handleFilterSearch = useCallback((e: any) => {
+    setFilterSearch(e.target.value);
+  }, []);
 
   const columns: ColumnDef<User>[] = [
     {
@@ -115,7 +122,7 @@ export default function UserPage() {
         </Button>
       }
     >
-      <Toolbar />
+      <Toolbar searchValue={filterSearch} searchOnChange={handleFilterSearch} />
       <DataTable
         columns={columns}
         links={users.links}

@@ -3,12 +3,39 @@ import { Head, usePage } from '@inertiajs/react';
 import DashboardLayout from '@/layouts/main';
 // global components
 import { DataTable } from '@/components/datatable/datatable';
-// local components
-import { UserGroup, columns } from './columns';
+// plugin
+import { ColumnDef } from '@tanstack/react-table';
+
+type UserGroup = {
+  id: string;
+  name: string;
+  email: string;
+  created_at: string;
+};
 
 export default function UserGroupPage() {
   // constants
   const { usergroup } = usePage<any>().props;
+
+  const columns: ColumnDef<UserGroup>[] = [
+    {
+      accessorKey: 'id',
+      header: 'ID',
+    },
+    {
+      accessorKey: 'name',
+      header: 'Name',
+    },
+    {
+      accessorKey: 'updated_at',
+      header: 'Date Last Updated',
+      cell: ({ row }) => {
+        const data = new Date(row.getValue('updated_at'));
+        const formatted = data.toLocaleDateString();
+        return <div className="font-medium">{formatted}</div>;
+      },
+    },
+  ];
 
   return (
     <>

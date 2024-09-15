@@ -10,15 +10,13 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
-// hooks
-import { useBoolean } from '@/hooks/use-boolean';
 
 interface CustomConfirmationDialog {
   open: boolean;
   subject?: string;
   description?: string;
   formFn?: (e: React.SyntheticEvent) => void;
-  openChange: any;
+  openChange: () => void;
 }
 
 export const ConfirmationDialog: React.FC<CustomConfirmationDialog> = (
