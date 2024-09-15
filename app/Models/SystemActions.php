@@ -22,4 +22,10 @@ class SystemActions extends Model
             set: fn($value) => Str::snake($value),
         );
     }
+    protected function name(): Attribute
+    {
+        return Attribute::make(
+            get: fn($value) => ucfirst($value),
+        );
+    }
 }
