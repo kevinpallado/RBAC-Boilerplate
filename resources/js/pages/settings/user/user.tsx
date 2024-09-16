@@ -107,7 +107,17 @@ export default function UserPage() {
         const user = row.original;
         return (
           <ColumnMenu>
-            <DropdownMenuItem>Custom User Access</DropdownMenuItem>
+            <DropdownMenuItem
+              disabled={
+                !_action.find((action: string) => action === 'update') &&
+                !_action.find((action: string) => action === 'store')
+              }
+              onClick={(e: any) =>
+                router.visit(route('system-settings.users.show', user.id))
+              }
+            >
+              Custom User Access
+            </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem
               disabled={!_action.find((action: string) => action === 'update')}

@@ -28,12 +28,17 @@ class UpdateSystemUserRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
-            'first_name' => 'required',
-            'last_name' => 'required',
-            'user_uuid' => 'required',
-            'email' => 'required|email|unique:system_users,email,'.$this->user_id,
-            'group_id' => 'required|exists:system_user_groups,id'
-        ];
+        switch ($this->action) {
+            case 'user-detail':
+                return [
+                    'first_name' => 'required',
+                    'last_name' => 'required',
+                    'user_uuid' => 'required',
+                    'email' => 'required|email|unique:system_users,email,'.$this->user_id,
+                    'group_id' => 'required|exists:system_user_groups,id'
+                ];
+            default:
+                return [];
+        }
     }
 }

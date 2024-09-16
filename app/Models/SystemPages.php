@@ -32,4 +32,21 @@ class SystemPages extends Model
             set: fn($value) => Str::snake($value),
         );
     }
+
+    public static function getPagesByModule() 
+    {
+        return self::get()->groupBy('module_slug')->map(function ($items) {
+            return [
+                'module' => $items->first()->module,
+                'module_slug' => $items->first()->module_slug,
+                'pages' => $items->map(function ($item) {
+                    return [
+                        'id' => $item->id,
+                        'page' => $item->page,
+                        'page_slug' => trim($item->page_slug),
+                    ];
+                })->toArray(),
+            ];
+        });
+    }
 }

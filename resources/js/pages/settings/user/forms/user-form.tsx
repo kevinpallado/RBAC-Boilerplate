@@ -23,6 +23,7 @@ export default function UserForm() {
     last_name: user?.last_name ?? '',
     user_uuid: user?.user_uuid ?? '',
     group_id: user?.group_id ?? '',
+    action: 'user-detail',
   });
   // confirmForm function to handle opening of dialog confirmation
   const confirmForm = (e: any) => {

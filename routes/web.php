@@ -22,8 +22,8 @@ Route::middleware('auth')->group(function () {
     Route::get('dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
 
     Route::prefix('system-settings')->name('system-settings.')->group(function () {
-        Route::resource('user-group', UsersGroupController::class)->except('edit');
-        Route::resource('users', UsersController::class)->except('view');
+        Route::resource('user-group', UsersGroupController::class);
+        Route::resource('users', UsersController::class);
     });
 });
 

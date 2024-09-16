@@ -1,5 +1,18 @@
 import { Icons } from '@/components/icons';
 
+export interface User {
+  id: number;
+  name: string;
+  email: string;
+  email_verified_at: string;
+}
+
+export interface UserDisplay {
+  name: string;
+  email: string;
+  image: any;
+}
+
 export type NavItem = {
   title: string;
   href: string;
