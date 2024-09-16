@@ -19,8 +19,6 @@ use ManagementSettings\Validations\UpdateSystemUserRequest;
 
 class UsersController extends Controller
 {
-    use SystemUserAccessTrait;
-
     public $page = 'users';
 
     public function __construct() {
@@ -38,7 +36,8 @@ class UsersController extends Controller
                     ->orWhere('email', 'like', '%'.$search.'%')
                 )
                 ->paginate($request->has('rows') ? $request->rows : 10)
-            )
+            ),
+            '_action' => auth()->user()->userPageAuthorizedActions($this->page)
         ]);
     }
 

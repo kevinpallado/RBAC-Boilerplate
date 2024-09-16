@@ -10,7 +10,6 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
-
 interface CustomConfirmationDialog {
   open: boolean;
   subject?: string;
@@ -18,7 +17,6 @@ interface CustomConfirmationDialog {
   formFn?: (e: React.SyntheticEvent) => void;
   openChange: () => void;
 }
-
 export const ConfirmationDialog: React.FC<CustomConfirmationDialog> = (
   props
 ) => {

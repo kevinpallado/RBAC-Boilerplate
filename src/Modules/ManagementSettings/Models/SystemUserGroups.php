@@ -24,6 +24,12 @@ class SystemUserGroups extends Model
             set: fn($value) => Str::snake($value),
         );
     }
+    protected function name(): Attribute
+    {
+        return Attribute::make(
+            set: fn($value) => ucwords($value),
+        );
+    }
     protected function updatedAt(): Attribute
     {
         return Attribute::make(

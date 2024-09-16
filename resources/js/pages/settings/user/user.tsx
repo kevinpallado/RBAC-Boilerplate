@@ -35,7 +35,7 @@ type User = {
 
 export default function UserPage() {
   // constants
-  const { users } = usePage<any>().props;
+  const { users, _action } = usePage<any>().props;
   const confirmDialog = useBoolean(false);
   const [columnId, setColumnId] = useState<number | null>(null);
   const [filterStatus, setFilterStatus] = useState<string | null>(null);
@@ -58,7 +58,6 @@ export default function UserPage() {
       },
     });
   };
-
   const handleFilterSearch = useCallback((e: any) => {
     setFilterSearch(e.target.value);
   }, []);
@@ -111,6 +110,7 @@ export default function UserPage() {
             <DropdownMenuItem>Custom User Access</DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem
+              disabled={!_action.find((action: string) => action === 'update')}
               onClick={(e: any) =>
                 router.visit(route('system-settings.users.edit', user.id))
               }
@@ -118,6 +118,7 @@ export default function UserPage() {
               Edit Account Details
             </DropdownMenuItem>
             <DropdownMenuItem
+              disabled={!_action.find((action: string) => action === 'delete')}
               onClick={(e: any) => {
                 confirmDialog.onTrue();
                 setColumnId(user.id);
@@ -138,6 +139,7 @@ export default function UserPage() {
       pageAction={
         <Button
           onClick={(e) => router.get(route('system-settings.users.create'))}
+          disabled={!_action.find((action: string) => action === 'store')}
         >
           Create New User
         </Button>

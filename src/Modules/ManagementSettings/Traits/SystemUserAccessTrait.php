@@ -23,6 +23,14 @@ trait SystemUserAccessTrait {
             )->when($viewOnly, fn($query) => $query->where('action','read'))
             ->get();
     }
+    /**
+     * $pageId id of the page in the database
+     * $accessType identify either access is user or group
+     * $accessId id of either UserGroup or Users
+     */
+    public function getPageAuthorizedAction($pageId, $accessId, $accessType = 'group') {
+        return SystemUserAccess::select('action')->where('access_type', $accessType)->where('access_id', $accessId)->where('page_id', $pageId)->pluck('action');
+    }
 
     public function getUserAuthorizedAction(): void {
         $systemPage = SystemPages::where('page_slug', $this->page)->first();

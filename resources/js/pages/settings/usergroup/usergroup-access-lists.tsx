@@ -1,16 +1,21 @@
-import { Head, usePage } from '@inertiajs/react';
+import { usePage, router } from '@inertiajs/react';
 // layouts
 import DashboardLayout from '@/layouts/main';
 // global components
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
+import { ConfirmationDialog } from '@/components/form/confirmation-dialog';
 import { Label } from '@/components/ui/label';
+// package
 import { useCallback, useState } from 'react';
+import { toast } from 'sonner';
+// hooks
+import { useBoolean } from '@/hooks/use-boolean';
 
 export default function UserGroupAccessListsPage() {
-  const { userGroup, actions, pages } = usePage<any>().props;
-  const [groupAccess, setGroupAccess] = useState<any[]>([]);
-
+  const { access, userGroup, actions, pages } = usePage<any>().props;
+  const confirmDialog = useBoolean(false);
+  const [groupAccess, setGroupAccess] = useState<any[]>(access);
   const applyAccess = useCallback(
     (checked: boolean, pageId: number, action: string) => {
       if (checked) {
@@ -33,16 +38,47 @@ export default function UserGroupAccessListsPage() {
     },
     []
   );
+  const isAccessChecked = (pageId: number, action: string) => {
+    return groupAccess.find(
+      (access: any) => access.page_id === pageId && access.action === action
+    )
+      ? true
+      : false;
+  };
+  const submitAccess = (e: any) => {
+    router.put(
+      route('system-settings.user-group.update', userGroup.id),
+      {
+        groupAccess: groupAccess,
+        action: 'group-access',
+      },
+      {
+        preserveScroll: true,
+        preserveState: true,
+        onSuccess: (success: any) => {
+          toast.success(success.props.notification.message);
+        },
+        onError: (errors: any) => {
+          toast.error('Something went wrong. Check form');
+        },
+      }
+    );
+  };
   return (
     <>
-      <Head title="User Group" />
       <DashboardLayout
         pageTitle={'User Groups'}
         pageDescription={'List of Modules/Actions and User Group`s Access'}
         pageAction={
-          <Button onClick={(e) => console.log(groupAccess)}>Save Access</Button>
+          <Button onClick={(e) => confirmDialog.onTrue()}>Save Access</Button>
         }
       >
+        <ConfirmationDialog
+          description="Are you sure you want to remove this user?"
+          open={confirmDialog.value}
+          openChange={confirmDialog.onToggle}
+          formFn={submitAccess}
+        />
         {Object.keys(pages).map((moduleSlug) => {
           const module = pages[moduleSlug];
           return (
@@ -59,6 +95,7 @@ export default function UserGroupAccessListsPage() {
                       >
                         <Checkbox
                           id={`${page.id}_${action.slug}`}
+                          checked={isAccessChecked(page.id, action.slug)}
                           onCheckedChange={(e: any) => {
                             applyAccess(e, page.id, action.slug);
                           }}

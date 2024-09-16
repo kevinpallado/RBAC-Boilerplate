@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Facades\Hash;
+// models
+use App\Models\SystemPages;
 // custom traits
 use ManagementSettings\Traits\SystemUserAccessTrait;
 
@@ -76,6 +78,8 @@ class SystemUser extends Authenticatable
     public function userAuthorizedModule() {
         return array_merge($this->getUserPageAccess(true)->toArray(), $this->getUserPageAccess(true, false)->toArray());
     }
-    
-    
+    public function userPageAuthorizedActions($page) {
+        $pageInfo = SystemPages::where('page_slug', $page)->first();
+        return array_merge($this->getPageAuthorizedAction($pageInfo->id, auth()->user()->group_id)->toArray(), $this->getPageAuthorizedAction($pageInfo->id, auth()->user()->id, 'user')->toArray());
+    }
 }
