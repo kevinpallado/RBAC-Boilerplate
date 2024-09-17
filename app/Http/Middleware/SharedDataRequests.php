@@ -25,7 +25,8 @@ class SharedDataRequests extends Middleware
             ],
             'auth' => [
                 'user' => $request->user(),
-                'access' => auth()->check() ? auth()->user()->userAuthorizedModule() : []
+                'access' => auth()->check() ? auth()->user()->userAuthorizedPage() : [],
+                'modules' => auth()->check() ? auth()->user()->userAuthorizedModule() : []
             ],
             'ziggy' => fn () => [
                 ...(new Ziggy)->toArray(),

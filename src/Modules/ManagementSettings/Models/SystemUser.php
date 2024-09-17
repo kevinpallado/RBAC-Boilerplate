@@ -75,8 +75,11 @@ class SystemUser extends Authenticatable
         return Hash::make($password.Str::random(5));
     }
     /** End static function */
-    public function userAuthorizedModule() {
+    public function userAuthorizedPage() {
         return array_merge($this->getUserPageAccess(true)->toArray(), $this->getUserPageAccess(true, false)->toArray());
+    }
+    public function userAuthorizedModule() {
+        return array_merge($this->getUserModuleAccess(true)->toArray(), $this->getUserModuleAccess(true, false)->toArray());
     }
     public function userPageAuthorizedActions($page) {
         $pageInfo = SystemPages::where('page_slug', $page)->first();

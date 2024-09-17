@@ -24,6 +24,20 @@ trait SystemUserAccessTrait {
             ->get();
     }
     /**
+     * $viewOnly specify to get "read" action access
+     * $userOnly if set to true only get the user access else it will get group access
+     */
+    public function getUserModuleAccess($viewOnly = false, $userOnly = true) {
+        return SystemUserAccess::select('system_pages.module_slug')
+            ->leftJoin('system_pages','system_pages.id','system_user_access.page_id')
+            ->when($userOnly, 
+                fn($query) => $query->where('access_type','account')->where('access_id', auth()->user()->id),
+                fn($query) => $query->where('access_type','group')->where('access_id', auth()->user()->group_id),
+            )->when($viewOnly, fn($query) => $query->where('action','read'))
+            ->groupBy('module_slug')
+            ->get();
+    }
+    /**
      * $pageId id of the page in the database
      * $accessType identify either access is user or group
      * $accessId id of either UserGroup or Users

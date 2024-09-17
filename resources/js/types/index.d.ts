@@ -28,26 +28,23 @@ export type PageProps<
     user: User;
   };
 };
-
+export type SidebarNavSubItem = {
+  title: string;
+  slug?: string;
+  pathKey?: string;
+  href?: string;
+  icon?: keyof typeof Icons;
+};
 export type SidebarNavItem = {
   title: string;
-  slug: string;
-  pathKey: string;
-  href: string;
-  disabled?: boolean;
-  external?: boolean;
+  slug?: string;
+  pathKey?: string;
+  href?: string;
   icon?: keyof typeof Icons;
-} & (
-  | {
-      href: string;
-      items?: never;
-    }
-  | {
-      href?: string;
-    }
-);
+  module: boolean;
+  pages: any;
+};
 
 export type DashboardConfig = {
-  // mainNav: MainNavItem[]
   sidebarNav: SidebarNavItem[];
 };

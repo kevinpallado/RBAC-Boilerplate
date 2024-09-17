@@ -84,7 +84,7 @@ class RBACSeeder extends Seeder
 
         foreach($users as $user) {
             SystemUser::updateOrCreate(
-                ['name' => $user['name'], 'email' => $user['email']],
+                ['email' => $user['email']],
                 [
                     'name' => $user['name'], 
                     'first_name' => $user['first_name'],

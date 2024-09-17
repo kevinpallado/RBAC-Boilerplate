@@ -26,25 +26,70 @@ export function DashboardNav({ items }: DashboardNavProps) {
     });
   }
 
+  function userHasModuleAccess(moduleAccess: string) {
+    return auth.modules.some(function (module: any) {
+      return module.module_slug === moduleAccess;
+    });
+  }
+
+  function renderLinkItem(
+    pageIndex: number,
+    disabled: boolean | undefined | null,
+    href: string,
+    title: string,
+    pathKey: string,
+    icon: keyof typeof Icons
+  ) {
+    const Icon = Icons[icon || 'arrowRight'];
+    return (
+      <Link key={pageIndex} href={disabled ? '/' : href}>
+        <span
+          className={cn(
+            'group flex items-center rounded-md px-3 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground',
+            route().current(pathKey) ? 'bg-accent' : 'transparent'
+          )}
+        >
+          <Icon className="mr-2 h-4 w-4" />
+          <span>{title}</span>
+        </span>
+      </Link>
+    );
+  }
+
   return (
     <nav className="grid items-start gap-2">
-      {items.map((item, index) => {
-        const Icon = Icons[item.icon || 'arrowRight'];
-        return (
-          userHasAccess(item.slug) &&
-          item.href && (
-            <Link key={index} href={item.disabled ? '/' : item.href}>
-              <span
-                className={cn(
-                  'group flex items-center rounded-md px-3 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground',
-                  route().current(item.pathKey) ? 'bg-accent' : 'transparent'
-                )}
-              >
-                <Icon className="mr-2 h-4 w-4" />
-                <span>{item.title}</span>
-              </span>
-            </Link>
-          )
+      {items.map((mainnav: any, index) => {
+        return mainnav.module && userHasModuleAccess(mainnav.slug) ? (
+          <div key={index}>
+            <p key={index} className="px-4 py-2 text-sm tracking-tight">
+              {mainnav.title}
+            </p>
+            {mainnav.pages.length > 0 &&
+              mainnav.pages.map(
+                (page: any, pageIndex: number) =>
+                  userHasAccess(page.slug) &&
+                  page.href &&
+                  renderLinkItem(
+                    pageIndex,
+                    page.disabled,
+                    page.href,
+                    page.title,
+                    page.pathKey,
+                    page.icon
+                  )
+              )}
+          </div>
+        ) : (
+          userHasAccess(mainnav.slug) &&
+            mainnav.href &&
+            renderLinkItem(
+              index,
+              mainnav.disabled,
+              mainnav.href,
+              mainnav.title,
+              mainnav.pathKey,
+              mainnav.icon
+            )
         );
       })}
     </nav>
