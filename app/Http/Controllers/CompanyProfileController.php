@@ -6,9 +6,8 @@ use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Inertia\Response;
 use Inertia\Inertia;
-// resource
-use App\Http\Resources\GeneralResourceCollection;
-use ManagementSettings\Models\SystemUserGroups;
+// models
+use ManagementSettings\Models\SystemCompanyInfo;
 
 class CompanyProfileController extends Controller
 {
@@ -18,9 +17,9 @@ class CompanyProfileController extends Controller
         $this->getUserAuthorizedAction();
         abort_unless($this->isUserHasAuthorizedAction('read'), 443);
 
-        return Inertia::render('settings/usergroup/usergroup')->with([
-            'usergroup' => GeneralResourceCollection::collection(SystemUserGroups::paginate($request->has('rows') ? $request->rows : 10)),
-            '_action' => auth()->user()->userPageAuthorizedActions($this->page)
+        return Inertia::render('settings/company/company')->with([
+            'formBasicQuestions' => SystemCompanyInfo::$basicInformation,
+            'formAddressQuestions' =>  SystemCompanyInfo::$companyAddress
         ]);
     }
 }

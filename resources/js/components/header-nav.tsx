@@ -6,12 +6,12 @@ import { Link } from '@inertiajs/react';
 import { Icons } from '@/components/icons';
 import { MobileNav } from '@/components/mobile-nav';
 
-interface MainNavProps {
+interface HeaderNavigationProps {
   items?: SidebarNavItem[];
   children?: React.ReactNode;
 }
 
-export function MainNav({ items, children }: MainNavProps) {
+export function HeaderNavigation({ items, children }: HeaderNavigationProps) {
   const [showMobileMenu, setShowMobileMenu] = React.useState<boolean>(false);
 
   return (

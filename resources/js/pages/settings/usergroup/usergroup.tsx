@@ -1,4 +1,4 @@
-import { Head, router, usePage, useForm } from '@inertiajs/react';
+import { router, usePage, useForm } from '@inertiajs/react';
 // layouts
 import DashboardLayout from '@/layouts/main';
 // global components
@@ -129,36 +129,33 @@ export default function UserGroupPage() {
   ];
 
   return (
-    <>
-      <Head title="User Group" />
-      <DashboardLayout
-        pageTitle={'User Groups'}
-        pageDescription={'Account groups within the system.'}
-        pageAction={
-          <Button
-            onClick={(e) => {
-              userGroupForm.reset();
-              formDialog.onTrue();
-            }}
-            disabled={!_action.find((action: string) => action === 'store')}
-          >
-            Create New User Group
-          </Button>
-        }
-      >
-        <UserGroupForm
-          open={formDialog.value}
-          openToggle={formDialog.onToggle}
-          userGroupForm={userGroupForm}
-          userGroupFormSubmit={submitUserGroupForm}
-        />
-        <DataTable
-          columns={columns}
-          links={usergroup.links}
-          meta={usergroup.meta}
-          data={usergroup.data}
-        />
-      </DashboardLayout>
-    </>
+    <DashboardLayout
+      pageTitle={'User Groups'}
+      pageDescription={'Account groups within the system.'}
+      pageAction={
+        <Button
+          onClick={(e) => {
+            userGroupForm.reset();
+            formDialog.onTrue();
+          }}
+          disabled={!_action.find((action: string) => action === 'store')}
+        >
+          Create New User Group
+        </Button>
+      }
+    >
+      <UserGroupForm
+        open={formDialog.value}
+        openToggle={formDialog.onToggle}
+        userGroupForm={userGroupForm}
+        userGroupFormSubmit={submitUserGroupForm}
+      />
+      <DataTable
+        columns={columns}
+        links={usergroup.links}
+        meta={usergroup.meta}
+        data={usergroup.data}
+      />
+    </DashboardLayout>
   );
 }

@@ -25,7 +25,7 @@ Route::middleware('auth')->group(function () {
 
     Route::prefix('system-settings')->name('system-settings.')->group(function () {
         Route::resource('policy-navigator', PolicyNavigatorController::class);
-        Route::resource('company-profile', CompanyProfileController::class);
+        Route::resource('company-profile', CompanyProfileController::class)->only('store','index');
         Route::resource('user-group', UsersGroupController::class);
         Route::resource('users', UsersController::class);
     });

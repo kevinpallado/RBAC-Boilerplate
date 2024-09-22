@@ -18,9 +18,6 @@ class PolicyNavigatorController extends Controller
         $this->getUserAuthorizedAction();
         abort_unless($this->isUserHasAuthorizedAction('read'), 443);
 
-        return Inertia::render('settings/usergroup/usergroup')->with([
-            'usergroup' => GeneralResourceCollection::collection(SystemUserGroups::paginate($request->has('rows') ? $request->rows : 10)),
-            '_action' => auth()->user()->userPageAuthorizedActions($this->page)
-        ]);
+        return Inertia::render('settings/policy/policy');
     }
 }

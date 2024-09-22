@@ -3,33 +3,18 @@
 import { Link, usePage } from '@inertiajs/react';
 
 import { SidebarNavItem } from '@/types';
-import { cn } from '@/utils';
+import { cn, userHasAccess, userHasModuleAccess } from '@/utils';
 import { Icons } from '@/components/icons';
 
-interface DashboardNavProps {
+interface SidebarNavigationProps {
   items: SidebarNavItem[];
 }
 
-export function DashboardNav({ items }: DashboardNavProps) {
+export function SidebarNavigation({ items }: SidebarNavigationProps) {
   const { auth } = usePage<any>().props;
 
   if (!items?.length) {
     return null;
-  }
-
-  function userHasAccess(pageAccess: string) {
-    if (pageAccess === 'dashboard') {
-      return true;
-    }
-    return auth.access.some(function (page: any) {
-      return page.page_slug === pageAccess;
-    });
-  }
-
-  function userHasModuleAccess(moduleAccess: string) {
-    return auth.modules.some(function (module: any) {
-      return module.module_slug === moduleAccess;
-    });
   }
 
   function renderLinkItem(
@@ -59,7 +44,8 @@ export function DashboardNav({ items }: DashboardNavProps) {
   return (
     <nav className="grid items-start gap-2">
       {items.map((mainnav: any, index) => {
-        return mainnav.module && userHasModuleAccess(mainnav.slug) ? (
+        return mainnav.module &&
+          userHasModuleAccess(mainnav.slug, auth.modules) ? (
           <div key={index}>
             <p key={index} className="px-4 py-2 text-sm tracking-tight">
               {mainnav.title}
@@ -67,7 +53,7 @@ export function DashboardNav({ items }: DashboardNavProps) {
             {mainnav.pages.length > 0 &&
               mainnav.pages.map(
                 (page: any, pageIndex: number) =>
-                  userHasAccess(page.slug) &&
+                  userHasAccess(page.slug, auth.access) &&
                   page.href &&
                   renderLinkItem(
                     pageIndex,
@@ -80,7 +66,7 @@ export function DashboardNav({ items }: DashboardNavProps) {
               )}
           </div>
         ) : (
-          userHasAccess(mainnav.slug) &&
+          userHasAccess(mainnav.slug, auth.access) &&
             mainnav.href &&
             renderLinkItem(
               index,
