@@ -4,9 +4,11 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Str;
 // models
 use App\Models\SystemPages;
 use App\Models\SystemUserAccess;
+use ManagementSettings\Models\SystemCompanyInfo;
 use ManagementSettings\Models\SystemUserGroups;
 
 class CompanyDataAccessSeeder extends Seeder
@@ -28,6 +30,21 @@ class CompanyDataAccessSeeder extends Seeder
             ]
         ];
 
+        $companyInfo = [
+            ['question' => 'Company Name', 'type' => 'text', 'category' => 'general'],
+            ['question' => 'Alias', 'type' => 'text', 'category' => 'general'],
+            ['question' => 'Number of Satellite Branch', 'type' => 'number', 'category' => 'general'],
+            ['question' => 'Phone Number', 'type' => 'text', 'category' => 'general'],
+            ['question' => 'Telephone Number', 'type' => 'text', 'category' => 'general'],
+            ['question' => 'Fax Number', 'type' => 'text', 'category' => 'general'],
+            ['question' => 'Email Address', 'type' => 'text', 'category' => 'general'],
+            ['question' => 'Street Address', 'type' => 'text', 'category' => 'address'],
+            ['question' => 'City/Municipality', 'type' => 'text', 'category' => 'address'],
+            ['question' => 'Province/State', 'type' => 'text', 'category' => 'address'],
+            ['question' => 'Region', 'type' => 'text', 'category' => 'address'],
+            ['question' => 'Zip Code', 'type' => 'text', 'category' => 'address'],
+        ];
+
         foreach($pages as $page) {
             $pageInfo = SystemPages::updateOrCreate(
                 ['module' => $page['module'], 'page' => $page['page']],
@@ -45,6 +62,13 @@ class CompanyDataAccessSeeder extends Seeder
                     ['access_type' => 'group', 'access_id' => SystemUserGroups::where("name", 'Administrator')->value('id'), 'page_id' => $pageInfo->id, 'action' => $action]
                 );
             }
+        }
+
+        foreach($companyInfo as $info) {
+            SystemCompanyInfo::updateOrCreate(
+                ['info_tag' => $info['question'], 'info_slug' => Str::snake(str_replace("/","",$info['question'])), 'info_type' => $info['type'], 'info_category' => $info['category']],
+                ['info_tag' => $info['question'], 'info_slug' => Str::snake(str_replace("/","",$info['question'])), 'info_type' => $info['type'], 'info_category' => $info['category']]
+            );
         }
     }
 }

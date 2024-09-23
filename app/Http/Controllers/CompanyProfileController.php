@@ -18,8 +18,19 @@ class CompanyProfileController extends Controller
         abort_unless($this->isUserHasAuthorizedAction('read'), 443);
 
         return Inertia::render('settings/company/company')->with([
-            'formBasicQuestions' => SystemCompanyInfo::$basicInformation,
-            'formAddressQuestions' =>  SystemCompanyInfo::$companyAddress
+            'formQuestions' => SystemCompanyInfo::get()
+        ]);
+    }
+
+    public function store(Request $request): RedirectResponse {
+        foreach($request->all() as $formkey => $formValue) {
+            SystemCompanyInfo::where('info_slug', $formkey)->update([
+                'info_value' => $formValue
+            ]);
+        }
+
+        return redirect()->back()->with([
+            'message' => 'Successfully updated company info'
         ]);
     }
 }

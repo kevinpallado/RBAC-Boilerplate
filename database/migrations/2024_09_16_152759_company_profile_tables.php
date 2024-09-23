@@ -14,6 +14,8 @@ return new class extends Migration
         Schema::create('system_company_info', function(Blueprint $table) {
             $table->string('info_tag');
             $table->string('info_slug');
+            $table->string('info_type');
+            $table->string('info_category');
             $table->longText('info_value')->nullable();
         });
 
@@ -60,5 +62,7 @@ return new class extends Migration
         Schema::dropIfExists('system_company_branches');
 
         Schema::dropIfExists('system_user_data_access');
+
+        Schema::dropIfExists('system_policies');
     }
 };
