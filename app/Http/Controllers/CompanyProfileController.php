@@ -7,6 +7,7 @@ use Illuminate\Http\RedirectResponse;
 use Inertia\Response;
 use Inertia\Inertia;
 // models
+use ManagementSettings\Models\SystemCompanyBranches;
 use ManagementSettings\Models\SystemCompanyInfo;
 
 class CompanyProfileController extends Controller
@@ -18,8 +19,13 @@ class CompanyProfileController extends Controller
         abort_unless($this->isUserHasAuthorizedAction('read'), 443);
 
         return Inertia::render('settings/company/company')->with([
-            'formQuestions' => SystemCompanyInfo::get()
+            'formQuestions' => SystemCompanyInfo::get(),
+            'companyBranches' => SystemCompanyBranches::get()
         ]);
+    }
+
+    public function create(Request $request): Response {
+        return Inertia::render('settings/company/forms/company-branch-form');
     }
 
     public function store(Request $request): RedirectResponse {

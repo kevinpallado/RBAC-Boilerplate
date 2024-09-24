@@ -8,6 +8,7 @@ use Illuminate\Support\Str;
 // models
 use App\Models\SystemPages;
 use App\Models\SystemUserAccess;
+use ManagementSettings\Models\SystemCompanyBranches;
 use ManagementSettings\Models\SystemCompanyInfo;
 use ManagementSettings\Models\SystemUserGroups;
 
@@ -70,5 +71,12 @@ class CompanyDataAccessSeeder extends Seeder
                 ['info_tag' => $info['question'], 'info_slug' => Str::snake(str_replace("/","",$info['question'])), 'info_type' => $info['type'], 'info_category' => $info['category']]
             );
         }
+
+        if(SystemCompanyBranches::count() < 4) {
+            for($sample=0; $sample<4; $sample++) {
+                SystemCompanyBranches::factory()->create();
+            }
+        }
+        
     }
 }
