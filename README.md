@@ -1,4 +1,9 @@
-# Required Packages for Development
+# Required Installation for Docker-Dev Container
+
+1. Install [docker desktop](https://www.docker.com/products/docker-desktop/)
+2. Install [devcontainer](https://code.visualstudio.com/docs/devcontainers/devcontainer-cli)
+
+# Required Packages for Development for Windows
 
 1. Download [pnpm](https://pnpm.io/) package globally for windows
 2. Install node 18.17.0
