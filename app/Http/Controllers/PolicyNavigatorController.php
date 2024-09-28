@@ -7,8 +7,7 @@ use Illuminate\Http\RedirectResponse;
 use Inertia\Response;
 use Inertia\Inertia;
 // resource
-use App\Http\Resources\GeneralResourceCollection;
-use ManagementSettings\Models\SystemUserGroups;
+use ManagementSettings\Models\SystemPolicies;
 
 class PolicyNavigatorController extends Controller
 {
@@ -18,6 +17,9 @@ class PolicyNavigatorController extends Controller
         $this->getUserAuthorizedAction();
         abort_unless($this->isUserHasAuthorizedAction('read'), 443);
 
-        return Inertia::render('settings/policy/policy');
+        return Inertia::render('settings/policy/policy')->with([
+            'systemPolicies' => SystemPolicies::getPoliciesByModule(),
+            '_action' => auth()->user()->userPageAuthorizedActions($this->page)
+        ]);
     }
 }
