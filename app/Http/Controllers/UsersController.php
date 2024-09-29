@@ -4,16 +4,16 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Hash;
 use Inertia\Response;
 use Inertia\Inertia;
 // resource
 use App\Http\Resources\GeneralResourceCollection;
-// traits
-use ManagementSettings\Traits\SystemUserAccessTrait;
 // models
 use App\Models\SystemActions;
 use App\Models\SystemPages;
 use App\Models\SystemUserAccess;
+use ManagementSettings\Models\SystemCompanyBranches;
 use ManagementSettings\Models\SystemUser;
 use ManagementSettings\Models\SystemUserGroups;
 // validations
@@ -26,14 +26,15 @@ class UsersController extends Controller
 
     public function __construct() {
         $this->userGroup = SystemUserGroups::select('id','name')->get();
+        $this->companyBranch = SystemCompanyBranches::select('id as value','name as label')->get()->toArray();
     }
 
     public function index(Request $request): Response {
         $this->getUserAuthorizedAction();
         abort_unless($this->isUserHasAuthorizedAction('read'), 443);
-
         return Inertia::render('settings/user/user')->with([
             'users' => GeneralResourceCollection::collection(SystemUser::with('userGroup:id,name')
+                ->withCount(['dataAccess'])
                 ->when($request->search, fn($query, $search) => $query->where('name', 'like', '%'.$search.'%')
                     ->orWhere('user_uuid', 'like', '%'.$search.'%')
                     ->orWhere('email', 'like', '%'.$search.'%')
@@ -46,21 +47,30 @@ class UsersController extends Controller
 
     public function create(Request $request): Response {
         $this->getUserAuthorizedAction();
+        $this->getModuleSystemPolicy();
         abort_unless($this->isUserHasAuthorizedAction('store'), 443);
 
         return Inertia::render('settings/user/forms/user-form')->with([
-            'userGroups' => $this->userGroup
+            'userGroups' => $this->userGroup,
+            'companyBranch' => $this->companyBranch,
+            '_policies' => $this->modulePolicy
         ]);
     }
 
     public function store(StoreSystemUserRequest $request): RedirectResponse {
-        SystemUser::create(array_merge($request->except('action'),
+        $userReference = SystemUser::create(array_merge($request->except('action'),
             [
                 'name' => $request->first_name.' '.$request->last_name,
                 'user_name' => $request->first_name.' '.$request->last_name,
-                'password' => SystemUser::generatePassword($request->first_name)
+                'password' => $request->modulePolicy['UserDefaultPassword'] ? SystemUser::generatePassword($request->first_name) : Hash::make($request->password),
             ]
         ));
+
+        SystemCompanyBranches::applyUserDataAccess(
+            $request->modulePolicy['UserDefaultDataAccess'], 
+            $request->dataAccess,
+            $userReference->id
+        );
 
         return redirect()->back()->with([
             'message' => 'Successfully create user account.'
@@ -77,25 +87,39 @@ class UsersController extends Controller
             'access' => $groupAccess,
             'actions' => SystemActions::get(),
             'pages' => SystemPages::getPagesByModule(),
-            'user' => $user
+            'user' => $user,
         ]);
     }
 
     public function edit(SystemUser $user): Response {
         $this->getUserAuthorizedAction();
+        $this->getModuleSystemPolicy();
         abort_unless($this->isUserHasAuthorizedAction('read'), 443);
 
         return Inertia::render('settings/user/forms/user-form')->with([
             'userGroups' => $this->userGroup,
-            'user' => $user
+            'companyBranch' => $this->companyBranch,
+            '_policies' => $this->modulePolicy,
+            'user' => $user,
+            'dataAccess' => $user->dataAccessIds()
         ]);
     }
 
     public function update(UpdateSystemUserRequest $request, SystemUser $user): RedirectResponse {
         switch($request->action) {
             case 'user-detail':
-                $user->fill(array_merge($request->except('user_id'),['name' => $request->first_name.' '.$request->last_name]));
+                $user->name = $request->first_name.' '.$request->last_name;
+                $user->first_name = $request->first_name;
+                $user->last_name = $request->last_name;
+                $user->email = $request->email;
+                $user->group_id = $request->group_id;
                 $user->save();
+
+                SystemCompanyBranches::applyUserDataAccess(
+                    $request->modulePolicy['UserDefaultDataAccess'], 
+                    $request->dataAccess,
+                    $user->id
+                );
         
                 return redirect()->route('system-settings.users.edit', $user->id)->with([
                     'message' => 'Successfully updated user account.'

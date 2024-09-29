@@ -6,9 +6,10 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller as BaseController;
 // traits
+use ManagementSettings\Traits\SystemPolicyTrait;
 use ManagementSettings\Traits\SystemUserAccessTrait;
 
 class Controller extends BaseController
 {
-    use AuthorizesRequests, ValidatesRequests, SystemUserAccessTrait;
+    use AuthorizesRequests, ValidatesRequests, SystemUserAccessTrait, SystemPolicyTrait;
 }

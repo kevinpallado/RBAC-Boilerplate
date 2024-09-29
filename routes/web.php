@@ -24,7 +24,7 @@ Route::middleware('auth')->group(function () {
     Route::get('dashboard', [DashboardController::class, 'dashboard'])->name('dashboard');
 
     Route::prefix('system-settings')->name('system-settings.')->group(function () {
-        Route::resource('policy-navigator', PolicyNavigatorController::class);
+        Route::resource('policy-navigator', PolicyNavigatorController::class)->only('index','update');
         Route::resource('company-profile', CompanyProfileController::class);
         Route::resource('user-group', UsersGroupController::class);
         Route::resource('users', UsersController::class);

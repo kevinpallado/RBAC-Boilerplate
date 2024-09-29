@@ -31,6 +31,7 @@ type User = {
   email: string;
   created_at: string;
   user_group: UserGroup;
+  data_access_count: number;
 };
 
 export default function UserPage() {
@@ -82,6 +83,17 @@ export default function UserPage() {
     {
       accessorKey: 'email',
       header: 'Email',
+      cell: ({ row }) => {
+        const userDetails = row.original;
+        return (
+          <>
+            <p className="text-md">{userDetails.email}</p>
+            <p className="text-xs">
+              Data Access [{userDetails.data_access_count}]
+            </p>
+          </>
+        );
+      },
     },
     {
       accessorKey: 'name',

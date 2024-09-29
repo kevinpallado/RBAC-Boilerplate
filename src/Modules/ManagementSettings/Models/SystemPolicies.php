@@ -24,7 +24,7 @@ class SystemPolicies extends Model
     ];
 
     public static $policyModules = [
-        'Users' => 'System Users'
+        'Users' => 'users'
     ];
 
     protected function slug(): Attribute
@@ -38,7 +38,7 @@ class SystemPolicies extends Model
     {
         return self::get()->groupBy('module')->map(function ($items) {
             return [
-                'module' => $items->first()->module,
+                'module' => ucfirst($items->first()->module),
                 'policies' => $items->map(function ($item) {
                     return [
                         'id' => $item->id,
@@ -56,5 +56,22 @@ class SystemPolicies extends Model
         })
         ->values()
         ->toArray();
+    }
+
+    public static function getPolicyModule($module) {
+        return self::select('slug','policy_value_type','policy_value')->where('module', $module)
+            ->get()
+            ->mapWithKeys(function ($item) {
+                switch($item->policy_value_type) {
+                    case 'boolean':
+                        $value = $item->policy_value === "true" ? true : false;
+                        break;
+                    default:
+                        $value = $item->policy_value;
+                        break;
+                }
+                return [$item->slug => $value];
+            })
+            ->toArray();
     }
 }

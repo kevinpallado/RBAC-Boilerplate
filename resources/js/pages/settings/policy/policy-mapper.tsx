@@ -1,6 +1,11 @@
+import { router } from '@inertiajs/react';
+// global components
+import { toast } from 'sonner';
 import { Checkbox } from '@/components/ui/checkbox';
 
 type PolicyMapperProps = {
+  dialogTrigger: any;
+  id: string;
   name: string;
   slug: string;
   description: string;
@@ -9,6 +14,29 @@ type PolicyMapperProps = {
 };
 
 export default function PolicyMapper(props: PolicyMapperProps) {
+  const handleCheckboxChange = (newPolicyValue: boolean, policyId: string) => {
+    props.dialogTrigger.onTrue();
+    router.put(
+      route('system-settings.policy-navigator.update', policyId),
+      {
+        policyValue: newPolicyValue,
+      },
+      {
+        preserveScroll: true,
+        preserveState: true,
+        replace: true,
+        onSuccess: (success: any) => {
+          props.dialogTrigger.onFalse();
+          toast.success(success.props.notification.message);
+        },
+        onError: (errors: any) => {
+          props.dialogTrigger.onFalse();
+          toast.error('Something went wrong. Check form');
+        },
+      }
+    );
+  };
+
   switch (props.policy_value_type) {
     case 'boolean':
       return (
@@ -16,7 +44,7 @@ export default function PolicyMapper(props: PolicyMapperProps) {
           <Checkbox
             id={props.slug}
             checked={props.policy_value === 'true' ? true : false}
-            onCheckedChange={(e: any) => console.log(e)}
+            onCheckedChange={(e: any) => handleCheckboxChange(e, props.id)}
           />
           <div className="grid gap-1.5 leading-none">
             <label

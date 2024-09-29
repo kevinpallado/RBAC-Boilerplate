@@ -5,6 +5,7 @@ namespace ManagementSettings\Models;
 use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Facades\Hash;
 // models
@@ -28,7 +29,9 @@ class SystemUser extends Authenticatable
         'last_name',
         'email',
         'group_id',
-        'user_uuid'
+        'user_uuid',
+        'password',
+        'user_name'
     ];
     /**
      * The attributes that should be hidden for serialization.
@@ -68,6 +71,10 @@ class SystemUser extends Authenticatable
     {
         return $this->belongsTo(SystemUserGroups::class, 'group_id', 'id');
     }
+    public function dataAccess(): hasMany
+    {
+        return $this->hasMany(SystemUserDataAccess::class, 'access_id', 'id')->where('access_type','account');
+    }
     /**
      * Static functions as user helpers
      */
@@ -75,6 +82,13 @@ class SystemUser extends Authenticatable
         return Hash::make($password.Str::random(5));
     }
     /** End static function */
+    public function dataAccessIds(): array
+    {
+        return SystemUserDataAccess::where('access_id', $this->id)
+                ->where('access_type','account')
+                ->pluck('branch_id')
+                ->toArray();
+    }
     public function userAuthorizedPage() {
         return array_merge($this->getUserPageAccess(true)->toArray(), $this->getUserPageAccess(true, false)->toArray());
     }
