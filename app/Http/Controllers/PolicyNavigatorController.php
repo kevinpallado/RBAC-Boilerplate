@@ -6,9 +6,8 @@ use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Inertia\Response;
 use Inertia\Inertia;
-// resource
-use App\Http\Resources\GeneralResourceCollection;
-use ManagementSettings\Models\SystemUserGroups;
+// models
+use ManagementSettings\Models\SystemPolicies;
 
 class PolicyNavigatorController extends Controller
 {
@@ -18,6 +17,22 @@ class PolicyNavigatorController extends Controller
         $this->getUserAuthorizedAction();
         abort_unless($this->isUserHasAuthorizedAction('read'), 443);
 
-        return Inertia::render('settings/policy/policy');
+        return Inertia::render('settings/policy/policy')->with([
+            'systemPolicies' => SystemPolicies::getPoliciesByModule(),
+            '_action' => auth()->user()->userPageAuthorizedActions($this->page)
+        ]);
+    }
+
+    public function update(SystemPolicies $policy_navigator, Request $request) {
+        switch($policy_navigator->policy_value_type) {
+            case 'boolean':
+                $policy_navigator->policy_value = $request->policyValue ? "true" : "false";
+                $policy_navigator->save();
+                break;
+        }
+
+        return redirect()->back()->with([
+            'message' => 'Successfully updated policy setup.'
+        ]);
     }
 }

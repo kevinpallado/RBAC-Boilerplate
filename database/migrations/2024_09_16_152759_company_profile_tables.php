@@ -45,10 +45,13 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('slug');
+            $table->string('module');
             $table->longText('description');
             $table->string('policy_value_type');
             $table->string('policy_value');
+            $table->string('last_modified_by')->nullable();
             $table->boolean('active')->default(true);
+            $table->timestamps();
         });
     }
 

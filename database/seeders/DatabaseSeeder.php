@@ -13,5 +13,6 @@ class DatabaseSeeder extends Seeder
     {
         $this->call(RBACSeeder::class);
         $this->call(CompanyDataAccessSeeder::class);
+        $this->call(PolicySeeder::class);
     }
 }
