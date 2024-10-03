@@ -7,7 +7,7 @@ import { usePage, Head } from '@inertiajs/react';
 
 interface DashboardLayoutProps {
   pageTitle: string;
-  pageDescription: string;
+  pageDescription?: string;
   pageAction?: React.ReactNode;
   children: React.ReactNode;
 }
@@ -45,7 +45,7 @@ export default function DashboardLayout({
             <div className="h-full flex-1 flex-col space-y-4 lg:flex">
               <div className="flex items-center justify-between space-y-2">
                 <div>
-                  <h2 className="text-2xl font-bold tracking-tight">
+                  <h2 className="mt-10 scroll-m-20 pb-2 text-3xl font-semibold tracking-tight transition-colors first:mt-0">
                     {pageTitle}
                   </h2>
                   <p className="text-muted-foreground">{pageDescription}</p>

@@ -20,6 +20,7 @@ class SharedDataRequests extends Middleware
     {
         return [
             ...parent::share($request),
+            'title' => config('app.name'),
             'notification' => [
                 'message' => fn () => $request->session()->get('message')
             ],
