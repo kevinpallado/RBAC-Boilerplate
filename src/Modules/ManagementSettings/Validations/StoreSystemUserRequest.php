@@ -57,6 +57,7 @@ class StoreSystemUserRequest extends FormRequest
         }
 
         return [
+            'nullable',
             'string',
             'min:10',            // At least 10 characters
             'regex:/[a-z]/',     // At least one lowercase letter
