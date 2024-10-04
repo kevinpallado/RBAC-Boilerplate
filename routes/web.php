@@ -29,6 +29,10 @@ Route::middleware('auth')->group(function () {
         Route::resource('user-group', UsersGroupController::class);
         Route::resource('users', UsersController::class);
     });
+
+    Route::prefix('user')->name('user.')->group(function () {
+        Route::get('my-profile', [UsersController::class, 'myProfile'])->name('my-profile');
+    });
 });
 
 require __DIR__.'/auth.php';
