@@ -6,11 +6,12 @@ import { useLockBody } from '@/hooks/use-lock-body';
 import { Icons } from '@/components/icons';
 
 interface MobileNavProps {
+  title: string;
   items: SidebarNavItem[];
   children?: React.ReactNode;
 }
 
-export function MobileNav({ items, children }: MobileNavProps) {
+export function MobileNav({ title, items, children }: MobileNavProps) {
   const { auth } = usePage<any>().props;
   useLockBody();
 
@@ -42,8 +43,8 @@ export function MobileNav({ items, children }: MobileNavProps) {
     >
       <div className="relative z-20 grid gap-6 rounded-md bg-popover p-4 text-popover-foreground shadow-md">
         <Link href="/" className="flex items-center space-x-2">
-          <Icons.logo />
-          <span className="font-bold">Sample Test Navigation</span>
+          <img className="w-14" src="/assets/logo.svg" alt={title} />
+          <span className="font-bold">{title}</span>
         </Link>
         <nav className="grid grid-flow-row auto-rows-max text-sm">
           {items.map((mainnav: any, index) => {

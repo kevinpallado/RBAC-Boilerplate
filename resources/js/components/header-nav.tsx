@@ -20,18 +20,24 @@ export function HeaderNavigation({ items, children }: HeaderNavigationProps) {
         href={route('dashboard')}
         className="hidden items-center space-x-2 lg:flex"
       >
-        <img src="/assets/logo.svg" alt="Your Company" />
+        <img src="/assets/logo.svg" alt={title} />
         <span className="hidden font-bold sm:inline-block">{title}</span>
       </Link>
       <button
         className="flex items-center space-x-2 lg:hidden"
         onClick={() => setShowMobileMenu(!showMobileMenu)}
       >
-        {showMobileMenu ? <Icons.close /> : <Icons.logo />}
-        <span className="font-bold">Sample Navigation</span>
+        {showMobileMenu ? (
+          <Icons.close />
+        ) : (
+          <img src="/assets/logo.svg" alt={title} />
+        )}
+        <span className="font-bold">{title}</span>
       </button>
       {showMobileMenu && items && (
-        <MobileNav items={items}>{children}</MobileNav>
+        <MobileNav items={items} title={title}>
+          {children}
+        </MobileNav>
       )}
     </div>
   );
