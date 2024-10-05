@@ -1,4 +1,4 @@
-import { Head, useForm } from '@inertiajs/react';
+import { useForm } from '@inertiajs/react';
 import {
   FormInput,
   FormCheckBox,
@@ -7,7 +7,7 @@ import {
 // layout
 import AuthLayout from '@/layouts/auth';
 
-export default function Example() {
+export default function Login() {
   const { data, setData, post, processing, errors } = useForm({
     email: '',
     password: '',
@@ -16,7 +16,7 @@ export default function Example() {
 
   function submitLogin(e: React.SyntheticEvent) {
     e.preventDefault();
-    post(route('login.submit'));
+    post(route('login'));
   }
 
   return (

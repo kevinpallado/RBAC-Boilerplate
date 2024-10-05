@@ -22,7 +22,8 @@ class SharedDataRequests extends Middleware
             ...parent::share($request),
             'title' => config('app.name'),
             'notification' => [
-                'message' => fn () => $request->session()->get('message')
+                'message' => fn () => $request->session()->get('message'),
+                'twofa' => fn () => $request->session()->get('status')
             ],
             'auth' => [
                 'user' => $request->user(),

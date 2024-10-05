@@ -13,13 +13,13 @@ interface ProfileLayoutProps {
 
 export default function ProfileLayout({ children }: ProfileLayoutProps) {
   const NavContent = () => (
-    <nav className="grid gap-4 text-sm text-muted-foreground">
+    <nav className="grid gap-2">
       {mySettingsConfig.sidebarNav.map((item: any) => (
         <Link key={item.title} href={item.href}>
           <span
             className={cn(
-              'group flex items-center rounded-md px-3 py-1 text-sm font-medium hover:bg-accent hover:text-accent-foreground'
-              // route().current(pathKey) ? 'bg-accent' : 'transparent'
+              'group flex items-center rounded-md px-3 py-1 text-sm font-medium hover:bg-accent hover:text-accent-foreground',
+              route().current(item.pathKey) ? 'bg-accent' : 'transparent'
             )}
           >
             <span>{item.title}</span>
