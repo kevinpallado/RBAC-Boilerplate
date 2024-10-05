@@ -15,8 +15,12 @@ type ModuleListArray = {
 
 export function userHasAccess(
   pageAccess: string | undefined,
-  userAccessList: AccessListArray[]
+  userAccessList: AccessListArray[],
+  defaultAccess?: boolean
 ) {
+  if (defaultAccess) {
+    return true;
+  }
   if (pageAccess === 'dashboard') {
     return true;
   }

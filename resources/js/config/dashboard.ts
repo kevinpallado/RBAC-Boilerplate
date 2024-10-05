@@ -48,3 +48,32 @@ export const dashboardConfig: DashboardConfig = {
       }
   ],
 }
+
+export const mySettingsConfig: DashboardConfig = {
+  sidebarNav: [
+    {
+      title: "General",
+      href: route('user.my-profile'),
+      slug: "general",
+      pathKey: "user.my-profile",
+      module: false,
+      pages: []
+    },
+    {
+      title: "Settings",
+      href: route('user.my-profile'),
+      slug: "general",
+      pathKey: "user.my-profile",
+      module: false,
+      pages: []
+    },
+    {
+      title: "Logs",
+      href: route('user.my-profile'),
+      slug: "general",
+      pathKey: "user.my-profile",
+      module: false,
+      pages: []
+    },
+  ],
+}

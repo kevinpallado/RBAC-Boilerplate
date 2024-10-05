@@ -3,15 +3,25 @@ import { Link, usePage } from '@inertiajs/react';
 import { SidebarNavItem } from '@/types';
 import { cn, userHasAccess, userHasModuleAccess } from '@/utils';
 import { useLockBody } from '@/hooks/use-lock-body';
-import { Icons } from '@/components/icons';
+
+// global components
+import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 
 interface MobileNavProps {
   title: string;
   items: SidebarNavItem[];
-  children?: React.ReactNode;
+  showMobileMenu?: boolean;
+  setShowMobileMenu?: any;
+  defaultAccess?: boolean;
 }
 
-export function MobileNav({ title, items, children }: MobileNavProps) {
+export function MobileNav({
+  title,
+  items,
+  showMobileMenu,
+  setShowMobileMenu,
+  defaultAccess,
+}: MobileNavProps) {
   const { auth } = usePage<any>().props;
   useLockBody();
 
@@ -36,12 +46,9 @@ export function MobileNav({ title, items, children }: MobileNavProps) {
     );
   }
   return (
-    <div
-      className={cn(
-        'fixed inset-0 top-16 z-50 grid h-[calc(100vh-4rem)] grid-flow-row auto-rows-max overflow-auto p-6 pb-32 shadow-md animate-in slide-in-from-bottom-80 lg:hidden'
-      )}
-    >
-      <div className="relative z-20 grid gap-6 rounded-md bg-popover p-4 text-popover-foreground shadow-md">
+    <Sheet open={showMobileMenu} onOpenChange={setShowMobileMenu}>
+      <SheetTrigger asChild></SheetTrigger>
+      <SheetContent side="left">
         <Link href="/" className="flex items-center space-x-2">
           <img className="w-14" src="/assets/logo.svg" alt={title} />
           <span className="font-bold">{title}</span>
@@ -69,7 +76,7 @@ export function MobileNav({ title, items, children }: MobileNavProps) {
                   )}
               </div>
             ) : (
-              userHasAccess(mainnav.slug, auth.access) &&
+              userHasAccess(mainnav.slug, auth.access, defaultAccess) &&
                 mainnav.href &&
                 renderLinkItem(
                   index,
@@ -81,8 +88,7 @@ export function MobileNav({ title, items, children }: MobileNavProps) {
             );
           })}
         </nav>
-        {children}
-      </div>
-    </div>
+      </SheetContent>
+    </Sheet>
   );
 }

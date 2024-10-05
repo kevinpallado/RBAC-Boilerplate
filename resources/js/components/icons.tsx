@@ -15,6 +15,7 @@ import {
   Loader2,
   LucideProps,
   Moon,
+  Menu,
   MoreVertical,
   Pizza,
   Plus,
@@ -56,6 +57,7 @@ export const Icons = {
   userSquare: UserSquare,
   building: Building,
   scale: Scale,
+  menu: Menu,
   gitHub: ({ ...props }: LucideProps) => (
     <svg
       aria-hidden="true"

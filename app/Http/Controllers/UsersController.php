@@ -146,4 +146,8 @@ class UsersController extends Controller
             'message' => 'Successfully archived user.'
         ]);
     }
+
+    public function myProfile(Request $request): Response {
+        return Inertia::render('user/my-profile');
+    }
 }

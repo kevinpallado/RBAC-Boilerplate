@@ -1,9 +1,10 @@
+import { Head } from '@inertiajs/react';
+// config
 import { dashboardConfig } from '@/config/dashboard';
-import { Toaster } from '@/components/ui/sonner';
-import { HeaderNavigation } from '@/components/header-nav';
+// global components
+import { Header } from '@/components/header';
 import { SidebarNavigation } from '@/components/web-nav';
-import { UserAccountNav } from '@/components/user-account-nav';
-import { usePage, Head } from '@inertiajs/react';
+import { Toaster } from '@/components/ui/sonner';
 
 interface DashboardLayoutProps {
   pageTitle: string;
@@ -18,27 +19,14 @@ export default function DashboardLayout({
   pageAction,
   children,
 }: DashboardLayoutProps) {
-  const { auth } = usePage<any>().props;
-
   return (
     <>
       <Head title={pageTitle} />
       <Toaster position="top-right" richColors />
       <div className="flex min-h-screen flex-col space-y-6">
-        <header className="sticky top-0 z-40 border-b bg-background">
-          <div className="container flex h-16 items-center justify-between py-4">
-            <HeaderNavigation items={dashboardConfig.sidebarNav} />
-            <UserAccountNav
-              user={{
-                name: auth.user.name,
-                image: 'https://avatars.githubusercontent.com/u/31546211?v=4',
-                email: auth.user.email,
-              }}
-            />
-          </div>
-        </header>
-        <div className="container xl:grid flex-1 gap-5 md:grid-cols-[200px_1fr]">
-          <aside className="hidden flex-col xl:flex">
+        <Header items={dashboardConfig.sidebarNav} />
+        <div className="container lg:grid flex-1 gap-5 md:grid-cols-[200px_1fr]">
+          <aside className="hidden flex-col lg:flex">
             <SidebarNavigation items={dashboardConfig.sidebarNav} />
           </aside>
           <main className="flex w-full flex-1 flex-col px-1 overflow-hidden">
