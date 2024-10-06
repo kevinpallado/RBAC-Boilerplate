@@ -5,6 +5,7 @@ import parse from 'html-react-parser';
 // layout
 import ProfileLayout from '@/layouts/profile';
 // global components
+import { toast } from 'sonner';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
@@ -53,13 +54,17 @@ export default function MySettings() {
   const showQrCode = () => {
     axios
       .get(route('two-factor.qr-code'))
-      .then((response) => setQrCode(response.data.svg));
+      .then((response) => setQrCode(response.data.svg))
+      .catch((error) => toast.error(error.response.data.message));
   };
 
   const showRecoveryCodes = () => {
-    axios.get(route('two-factor.recovery-codes')).then((response) => {
-      setRecoveryCode(response.data);
-    });
+    axios
+      .get(route('two-factor.recovery-codes'))
+      .then((response) => {
+        setRecoveryCode(response.data);
+      })
+      .catch((error) => toast.error(error.response.data.message));
   };
 
   useEffect(() => {
@@ -69,7 +74,7 @@ export default function MySettings() {
   }, []);
 
   return (
-    <ProfileLayout>
+    <ProfileLayout pageTitle={'Settings'}>
       <div className="space-y-6">
         <div>
           <h3 className="text-lg font-medium">Security</h3>
@@ -85,7 +90,15 @@ export default function MySettings() {
               proceeding with two-factor authentication.
             </p>
           </div>
-          <Badge variant={pwConfirmStatus ? 'destructive' : 'default'}>
+          <Badge
+            className={!pwConfirmStatus ? 'cursor-pointer' : ''}
+            variant={pwConfirmStatus ? 'destructive' : 'default'}
+            onClick={(e) => {
+              if (!pwConfirmStatus) {
+                router.visit('confirm-password');
+              }
+            }}
+          >
             {pwConfirmStatus ? 'Confirmed' : 'To Confirm'}
           </Badge>
         </div>
