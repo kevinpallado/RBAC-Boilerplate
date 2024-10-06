@@ -32,7 +32,6 @@ Route::middleware('auth')->group(function () {
 
     Route::prefix('user')->name('user.')->group(function () {
         Route::get('my-profile', [UsersController::class, 'myProfile'])->name('my-profile');
+        Route::get('my-settings', [UsersController::class, 'mySettings'])->name('my-settings');
     });
 });
-
-require __DIR__.'/auth.php';

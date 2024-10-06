@@ -61,9 +61,9 @@ export const mySettingsConfig: DashboardConfig = {
     },
     {
       title: "Settings",
-      href: route('user.my-profile'),
+      href: route('user.my-settings'),
       slug: "general",
-      pathKey: "user.my-profile",
+      pathKey: "user.my-settings",
       module: false,
       pages: []
     },

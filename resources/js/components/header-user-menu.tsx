@@ -47,7 +47,7 @@ export function HeaderUserMenu({ user }: UserAccountNavProps) {
           className="cursor-pointer"
           onSelect={(event) => {
             event.preventDefault();
-            router.post(route('auth.logout'));
+            router.post(route('logout'));
           }}
         >
           Sign out

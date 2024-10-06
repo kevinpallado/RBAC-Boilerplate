@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Facades\Hash;
+use Laravel\Fortify\TwoFactorAuthenticatable;
 // models
 use App\Models\SystemPages;
 // custom traits
@@ -15,7 +16,7 @@ use ManagementSettings\Traits\SystemUserAccessTrait;
 
 class SystemUser extends Authenticatable
 {
-    use SystemUserAccessTrait;
+    use SystemUserAccessTrait, TwoFactorAuthenticatable;
 
     protected $table = 'system_users';
     /**

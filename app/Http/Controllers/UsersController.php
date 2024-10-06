@@ -7,6 +7,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Hash;
 use Inertia\Response;
 use Inertia\Inertia;
+use Laravel\Fortify\Features;
 // resource
 use App\Http\Resources\GeneralResourceCollection;
 // models
@@ -149,5 +150,13 @@ class UsersController extends Controller
 
     public function myProfile(Request $request): Response {
         return Inertia::render('user/my-profile');
+    }
+
+    public function mySettings(Request $request): Response {
+        return Inertia::render('user/my-settings')->with([
+            'confirmed2FA' => auth()->user()->two_factor_confirmed_at,
+            'twoFASecret' => auth()->user()->two_factor_secret,
+            'twoFARecCodes' => auth()->user()->two_factor_recovery_codes,
+        ]);
     }
 }
