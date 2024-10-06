@@ -31,10 +31,16 @@ export default function MySettings() {
     confirmTwoFactorAuthentication: '',
   });
 
-  function checkedChange(e: any) {
-    confirmed2FA
-      ? router.delete(route('two-factor.disable'))
-      : router.post(route('two-factor.enable'));
+  function checkedChange(value: boolean) {
+    value
+      ? router.post(route('two-factor.enable'))
+      : router.delete(route('two-factor.disable'), {
+          preserveScroll: true,
+          preserveState: true,
+          onSuccess: () => {
+            setTwoFAEnabled(false);
+          },
+        });
   }
 
   function confirm2FACode(e: any) {
