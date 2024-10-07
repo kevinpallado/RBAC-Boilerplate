@@ -11,6 +11,8 @@ import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
 import { FormInput, FormButtonSubmit } from '@/components/form/input';
+// local components
+import UserResetPassword from './user-reset-password';
 
 export default function MySettings() {
   const { notification, confirmed2FA, twoFASecret, twoFARecCodes } =
@@ -19,6 +21,7 @@ export default function MySettings() {
   const [isTwoFAEnabled, setTwoFAEnabled] = useState<boolean>(
     twoFASecret && twoFARecCodes ? true : false
   );
+  const [pwReset, setPwReset] = useState<boolean>(false);
   const [pwConfirmStatus, setPwConfirmStatus] = useState<boolean>(false);
   const [twoFAConfirmError, setTwoFAConfirmError] = useState<string | null>(
     null
@@ -83,9 +86,9 @@ export default function MySettings() {
     <ProfileLayout pageTitle={'Settings'}>
       <div className="space-y-6">
         <div>
-          <h3 className="text-lg font-medium">Security</h3>
+          <h3 className="text-lg font-medium">Two Factor Authentication</h3>
           <p className="text-sm text-muted-foreground">
-            Configure your account security.
+            For extra security of your account enable this feature.
           </p>
         </div>
         <div className="flex flex-row items-center justify-between rounded-lg border p-4">
@@ -175,6 +178,29 @@ export default function MySettings() {
                 </div>
               )}
             </div>
+          </div>
+        )}
+        <div>
+          <h3 className="text-lg font-medium">Password</h3>
+          <p className="text-sm text-muted-foreground">
+            Configure your account security.
+          </p>
+        </div>
+        <div className="flex flex-row items-center justify-between rounded-lg border p-4">
+          <div className="space-y-0.5">
+            <Label className="space-y-0.5">Reset Your Password</Label>
+            <p className="text-sm text-muted-foreground">
+              Toggle the switch to show reset password form
+            </p>
+          </div>
+          <Switch
+            checked={pwReset}
+            onCheckedChange={(e: boolean) => setPwReset(e)}
+          />
+        </div>
+        {pwReset && (
+          <div className="w-[360px]">
+            <UserResetPassword setPwReset={setPwReset} />
           </div>
         )}
       </div>

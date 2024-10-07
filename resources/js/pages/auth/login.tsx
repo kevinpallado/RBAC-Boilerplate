@@ -1,4 +1,4 @@
-import { useForm } from '@inertiajs/react';
+import { Link, useForm } from '@inertiajs/react';
 import {
   FormInput,
   FormCheckBox,
@@ -62,12 +62,12 @@ export default function Login() {
               </div>
 
               <div className="text-sm leading-6">
-                <a
-                  href="#"
+                <Link
+                  href={route('password.request')}
                   className="font-semibold text-indigo-600 hover:text-indigo-500"
                 >
                   Forgot password?
-                </a>
+                </Link>
               </div>
             </div>
             <FormButtonSubmit loading={processing} label={'Sign In'} />
